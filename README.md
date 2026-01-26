@@ -14,20 +14,17 @@
 
 镜像同时推送到 Docker Hub 和 GitHub Container Registry (GHCR)。
 
-* **Docker Hub:**
+- **Docker Hub:**
 
   ```console
   docker pull superng6/xray
+  ```
 
-```
+- **GHCR.io:**
 
-* **GHCR.io:**
   ```console
   docker pull ghcr.io/superng6/xray
-
-```
-
-
+  ```
 
 ---
 
