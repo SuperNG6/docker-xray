@@ -22,8 +22,8 @@
 ```
 
 * **GHCR.io:**
-```console
-docker pull ghcr.io/superng6/xray
+  ```console
+  docker pull ghcr.io/superng6/xray
 
 ```
 
