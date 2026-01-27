@@ -3,7 +3,7 @@ name: Auto Build Docker Image
 on:
   workflow_dispatch:
   schedule:
-    - cron: '30 21 * * *'
+    - cron: '30 18 * * *'
 
 env:
   DOCKER_IMAGE: superng6/xray
