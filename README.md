@@ -35,6 +35,16 @@
 * **`latest`** & `version tag` (如 `v26.1.23`)
 [XTLS/Xray-core 的最新稳定版 (Stable Release)](https://github.com/XTLS/Xray-core/releases)，包含所有正式功能，推荐生产环境使用。
 
+* **`dev`** & `version tag`（如 `v26.9.9`）
+[XTLS/Xray-core 的最新预发布版 (Pre-release)](https://github.com/XTLS/Xray-core/releases)。通过上游 Release 的 `prerelease` 标记识别，版本号不一定包含 `beta` 或 `rc`。
+
+```console
+docker pull superng6/xray:dev
+docker pull ghcr.io/superng6/xray:dev
+```
+
+在 Docker Compose 中，将 `image` 改为 `superng6/xray:dev` 或 `ghcr.io/superng6/xray:dev` 即可使用预发布通道。`latest` 始终跟踪稳定版。
+
 ---
 
 ## 编译优化与特性
@@ -70,7 +80,7 @@
 
 ## Dockerfile 设计说明
 
-* 使用多阶段构建，第一阶段基于 `golang:1.25` 进行编译。
+* 使用多阶段构建，第一阶段基于 `golang:1.26` 进行编译。
 * 运行阶段基于 `gcr.io/distroless/static-debian12:latest`，极简镜像，安全无 Shell。
 * 采用 `confdir` 模式启动，支持多配置文件合并。
 
@@ -157,7 +167,13 @@ docker run -d \
 ## 自动化构建
 
 所有镜像通过 GitHub Actions 自动构建，保证镜像纯净且及时更新。
-构建状态查看：[GitHub Actions](https://www.google.com/search?q=https://github.com/SuperNG6/docker-xray/actions)
+* **Auto Build Docker Image**：每天 UTC 18:30（北京时间次日 02:30）检查上游，也可手动触发。稳定版与预发布版分别检测，只有版本变化时才构建对应通道。
+* **Manual Build Docker Image**：手动触发或修改 `Dockerfile` 时，重建两个通道。可填写 `stable_version` / `pre_version` 指定上游 tag；留空时读取对应版本文件，没有记录的通道会跳过。手动指定版本不会修改自动检测记录。
+* 两个通道均构建上述全部架构，并发布到 Docker Hub 和 GHCR；稳定版发布 `latest` 与版本标签，预发布版发布 `dev` 与版本标签。
+* `ReleaseTag` / `PreReleaseTag` 分别记录成功发布的版本，只有对应通道的镜像发布并检查成功后才更新。失败的构建会在下次自动检查时重试。`PreReleaseTag` 初始为空，首次运行自动工作流时会检测并构建预发布版。
+* 使用现有 `DOCKERHUB_USERNAME`、`DOCKERHUB_TOKEN` secrets 和自动提供的 `GITHUB_TOKEN`。自动工作流需要能写入版本记录文件，GHCR 发布需要 `packages: write`（工作流已声明）。
+
+构建状态查看：[GitHub Actions](https://github.com/SuperNG6/docker-xray/actions)
 
 ---
 
