@@ -80,7 +80,7 @@ docker pull ghcr.io/superng6/xray:dev
 
 ## Dockerfile 设计说明
 
-* 使用多阶段构建，第一阶段基于 `golang:1.26` 进行编译。
+* 使用多阶段构建，第一阶段基于 `golang:1.27` 进行编译。
 * 运行阶段基于 `gcr.io/distroless/static-debian12:latest`，极简镜像，安全无 Shell。
 * 采用 `confdir` 模式启动，支持多配置文件合并。
 
